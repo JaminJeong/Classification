@@ -1,0 +1,5 @@
+.idea
+*.pyc
+*.swp
+flower_photos
+flower_photos.tgz
