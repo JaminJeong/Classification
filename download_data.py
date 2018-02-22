@@ -28,4 +28,7 @@ def download_and_uncompress_tarball(tarball_url, dataset_dir):
 # The URL where the Flowers data can be downloaded.
 _DATA_URL = 'http://download.tensorflow.org/example_images/flower_photos.tgz'
 
-download_and_uncompress_tarball(_DATA_URL, "./flowers_data")
+#if os.path.isdir("./flowers_data") == False:
+#  os.mkdir("./flowers_data")
+
+download_and_uncompress_tarball(_DATA_URL, "./")
