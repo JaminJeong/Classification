@@ -4,6 +4,9 @@ import tarfile
 
 from six.moves import urllib
 
+# The URL where the Flowers data can be downloaded.
+_DATA_URL = 'http://download.tensorflow.org/example_images/flower_photos.tgz'
+
 def download_and_uncompress_tarball(tarball_url, dataset_dir):
   """Downloads the `tarball_url` and uncompresses it locally.
 
@@ -24,11 +27,3 @@ def download_and_uncompress_tarball(tarball_url, dataset_dir):
   print('Successfully downloaded', filename, statinfo.st_size, 'bytes.')
   tarfile.open(filepath, 'r:gz').extractall(dataset_dir)
 
-
-# The URL where the Flowers data can be downloaded.
-_DATA_URL = 'http://download.tensorflow.org/example_images/flower_photos.tgz'
-
-#if os.path.isdir("./flowers_data") == False:
-#  os.mkdir("./flowers_data")
-
-download_and_uncompress_tarball(_DATA_URL, "./")

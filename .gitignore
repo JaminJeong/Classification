@@ -3,3 +3,5 @@
 *.swp
 flower_photos
 flower_photos.tgz
+tfrecords
+log
