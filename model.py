@@ -6,6 +6,7 @@ import tensorflow as tf
 
 import image_processing
 from vgg import vgg_16
+from resnet import imagenet_resnet_v2
 
 slim = tf.contrib.slim
 layers = tf.layers
@@ -15,84 +16,6 @@ FLAGS = tf.app.flags.FLAGS
 
 _BATCH_NORM_DECAY = 0.997
 _BATCH_NORM_EPSILON = 1e-5
-
-def conv2d(inputs,
-           filters,
-           kernel_size=[3, 3], # [depth, height, width]
-           strides=[1, 1],     # [depth, height, width]
-           padding='SAME',
-           activation=tf.nn.relu,
-           weight_decay=0.0005,
-           scope=None):
-
-  with tf.variable_scope(scope, 'conv2d'):
-    layer = layers.conv2d(inputs=inputs,
-                          filters=filters,
-                          kernel_size=kernel_size,
-                          strides=strides,
-                          padding=padding,
-                          activation=activation,
-                          kernel_initializer=tf.contrib.layers.xavier_initializer(),
-                          kernel_regularizer=tf.contrib.layers.l2_regularizer(weight_decay))
-    return layer
-
-
-def max_pooling2d(inputs,
-                  pool_size=[2, 2],  # [depth, height, width]
-                  strides=[2, 2],    # [depth, height, width]
-                  padding='VALID',
-                  scope=None):
-
-  with tf.variable_scope(scope, 'max_pooling2d'):
-    layer = layers.max_pooling2d(inputs=inputs,
-                                 pool_size=pool_size,
-                                 strides=strides,
-                                 padding=padding)
-    return layer
-
-
-def average_pooling2d(inputs,
-                      pool_size=[7, 7],  # [depth, height, width]
-                      strides=[1, 1],    # [depth, height, width]
-                      padding='VALID',
-                      scope=None):
-
-  with tf.variable_scope(scope, 'avg_pooling2d'):
-    layer = layers.average_pooling2d(inputs=inputs,
-                                     pool_size=pool_size,
-                                     strides=strides,
-                                     padding=padding)
-    return layer
-
-
-def dense(inputs,
-          num_outputs,
-          activation=tf.nn.relu,
-          weight_decay=0.0005,
-          scope=None):
-
-  with tf.variable_scope(scope, 'fully_connected'):
-    layer = layers.dense(inputs=inputs,
-                         units=num_outputs,
-                         activation=activation,
-                         kernel_initializer=tf.contrib.layers.xavier_initializer(),
-                         kernel_regularizer=tf.contrib.layers.l2_regularizer(weight_decay))
-    return layer
-
-
-def dropout(inputs,
-            rate=0.5,
-            training=False,
-            scope=None):
-
-  with tf.variable_scope(scope, 'dropout'):
-    layer = layers.dropout(inputs=inputs,
-                           rate=rate,
-                           training=training)
-    return layer
-
-
-
 
 
 class Model(object):
@@ -179,13 +102,15 @@ class Model(object):
     # dimension convention: depth x height x width x channels
     inputs = self.images
 
-    with tf.variable_scope('model', [inputs]) as sc:
-      if self.mode == "validation":
-        sc.reuse_variables()
+    # with tf.variable_scope('model', [inputs]) as sc:
+    #   if self.mode == "validation":
+    #     sc.reuse_variables()
 
-      net, end_points = vgg_16(inputs, num_classes=self.num_classes, is_training=self.is_training())
-      print("self.num_classes")
-      print(self.num_classes)
+    net, end_points = vgg_16(inputs, num_classes=self.num_classes, is_training=self.is_training())
+    # net = imagenet_resnet_v2(50, self.num_classes)(inputs, self.is_training())
+
+    print("self.num_classes")
+    print(self.num_classes)
 
 
     print('complete network build.')
@@ -199,13 +124,9 @@ class Model(object):
     self.logits = self.build_network()
 
     if self.mode == "train":
-      print("self.labels.shape")
-      print(self.labels.shape)
-
-      loss = tf.losses.softmax_cross_entropy(onehot_labels=self.labels,
-                                                  logits=self.logits,
-                                                  scope='loss')
-      self.loss = loss
+      self.loss = tf.losses.softmax_cross_entropy(onehot_labels=self.labels,
+                                                  logits=self.logits)
+                                                  # scope='loss')
 
       for var in tf.trainable_variables():
         tf.summary.histogram(var.op.name, var)
@@ -224,10 +145,12 @@ class Model(object):
     """Sets up the global step Tensor."""
     if self.mode == "train":
       self.global_step = tf.Variable(
-                            initial_value=0,
-                            name="global_step",
-                            trainable=False,
-                            collections=[tf.GraphKeys.GLOBAL_STEP, tf.GraphKeys.GLOBAL_VARIABLES])
+                              initial_value=0,
+                              name="global_step",
+                              trainable=False,
+                              collections=[tf.GraphKeys.GLOBAL_STEP, tf.GraphKeys.GLOBAL_VARIABLES],
+                              dtype=tf.int64)
+
 
       print('complete setup global_step.')
 

@@ -113,6 +113,9 @@ tf.app.flags.DEFINE_boolean('is_all_checkpoints',
 tf.app.flags.DEFINE_string('subset', 'validation',
                            """Either 'validation', 'test' or 'train'.""")
 
+tf.app.flags.DEFINE_string('pretrained_file_path',
+                           None,
+                           """pretrained model file for fine tuning""")
 
 ###############################
 # Frequency of the eval Flags #

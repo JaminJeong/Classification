@@ -25,6 +25,71 @@ FLAGS = tf.app.flags.FLAGS
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
+# def _get_init_fn():
+#   """Returns a function run by the chief worker to warm-start the training.
+
+#   Note that the init_fn is only run when initializing the model during the very
+#   first global step.
+
+#   Returns:
+#     An init function run by the supervisor.
+#   """
+#   if FLAGS.checkpoint_path is None:
+#     return None
+
+#   # Warn the user if a checkpoint exists in the train_dir. Then we'll be
+#   # ignoring the checkpoint anyway.
+#   if tf.train.latest_checkpoint(FLAGS.train_dir):
+#     tf.logging.info(
+#         'Ignoring --checkpoint_path because a checkpoint already exists in %s'
+#         % FLAGS.train_dir)
+#     return None
+
+#   exclusions = []
+#   if FLAGS.checkpoint_exclude_scopes:
+#     exclusions = [scope.strip()
+#                   for scope in FLAGS.checkpoint_exclude_scopes.split(',')]
+
+#   # TODO(sguada) variables.filter_variables()
+#   variables_to_restore = []
+#   for var in slim.get_model_variables():
+#     excluded = False
+#     for exclusion in exclusions:
+#       if var.op.name.startswith(exclusion):
+#         excluded = True
+#         break
+#     if not excluded:
+#       variables_to_restore.append(var)
+
+#   if tf.gfile.IsDirectory(FLAGS.checkpoint_path):
+#     checkpoint_path = tf.train.latest_checkpoint(FLAGS.checkpoint_path)
+#   else:
+#     checkpoint_path = FLAGS.checkpoint_path
+
+#   tf.logging.info('Fine-tuning from %s' % checkpoint_path)
+
+#   return slim.assign_from_checkpoint_fn(
+#       checkpoint_path,
+#       variables_to_restore,
+#       ignore_missing_vars=FLAGS.ignore_missing_vars)
+
+# # Create the model
+# predictions = vgg.vgg_16(images)
+#
+# train_op = slim.learning.create_train_op(...)
+#
+# # Specify where the Model, trained on ImageNet, was saved.
+# model_path = '/path/to/pre_trained_on_imagenet.checkpoint'
+#
+# # Specify where the new model will live:
+# log_dir = '/path/to/my_pascal_model_dir/'
+#
+# # Restore only the convolutional layers:
+# variables_to_restore = slim.get_variables_to_restore(exclude=['fc6', 'fc7', 'fc8'])
+# init_fn = slim.assign_from_checkpoint_fn(model_path, variables_to_restore)
+#
+# # Start training.
+# slim.learning.train(train_op, log_dir, init_fn=init_fn)
 
 def main(_):
 
@@ -98,8 +163,18 @@ def main(_):
                                     learning_rate=learning_rate,
                                     optimizer=optimizer,
                                     clip_gradients=5.0,
-                                    learning_rate_decay_fn=_learning_rate_decay_fn,
+                                    learning_rate_decay_fn=None,
                                     name='loss')
+
+    # Restore only the convolutional layers:
+    variables_to_restore = slim.get_variables_to_restore(exclude=['vgg_16/fc6', 'vgg_16/fc7', 'vgg_16/fc8'])
+    if FLAGS.pretrained_file_path == None:
+        init_fn = None
+    else:
+        init_fn = slim.assign_from_checkpoint_fn(FLAGS.pretrained_file_path,
+                                                 variables_to_restore,
+                                                 ignore_missing_vars=True
+                                                 )
 
     # Set up the Saver for saving and restoring model checkpoints.
     saver = tf.train.Saver(max_to_keep=1000)
@@ -114,13 +189,15 @@ def main(_):
                              summary_op=None,       # Do not run the summary services
                              saver=saver,
                              save_model_secs=0,     # Do not run the save_model services
-                             init_fn=None)          # Not use pre-trained model
+                             init_fn=init_fn)       # use pre-trained model
     with sv.managed_session() as sess:
       tf.logging.info('Starting Session.')
 
       # Start the queue runners.
       sv.start_queue_runners(sess=sess)
       tf.logging.info('Starting Queues.')
+
+      # sess.run(tf.global_variables_initializer())
 
       # Run a model
       pre_epochs = 0.0
@@ -138,7 +215,7 @@ def main(_):
 
         # Save the model summaries periodically.
         # if int(pre_epochs) < int(epochs):
-        if _global_step % 100 == 0:
+        if _global_step % 200 == 0:
           start_time_val = time.time()
           count_top_1 = 0.
           num_iter = int(math.ceil(FLAGS.num_examples_val / FLAGS.batch_size_val))
@@ -163,13 +240,13 @@ def main(_):
 
 
         # Print the step, loss, and other information periodically for monitoring.
-        #if _global_step % 10 == 0:
-        examples_per_sec = FLAGS.batch_size / float(duration)
-        print("Epochs: %.2f global_step: %d loss: %.4f  (%.1f examples/sec; %.3f sec/batch)"
-                  % (epochs, _global_step, loss, examples_per_sec, duration))
+        if _global_step % 10 == 0:
+            examples_per_sec = FLAGS.batch_size / float(duration)
+            print("Epochs: %.2f global_step: %d loss: %.4f  (%.1f examples/sec; %.3f sec/batch)"
+                      % (epochs, _global_step, loss, examples_per_sec, duration))
 
         # Save the model summaries periodically.
-        if _global_step % 100 == 0:
+        if _global_step % 200 == 0:
           summary_str = sess.run(summary_op)
           sv.summary_computed(sess, summary_str)
 

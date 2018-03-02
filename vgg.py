@@ -179,8 +179,10 @@ def vgg_16(inputs,
       or the input to the logits layer (if num_classes is 0 or None).
     end_points: a dict of tensors with intermediate activations.
   """
-  with tf.variable_scope(scope, 'vgg_16', [inputs]) as sc:
+
+  with tf.variable_scope('vgg_16', [inputs], reuse=(not is_training)) as sc:
     end_points_collection = sc.original_name_scope + '_end_points'
+
     # Collect outputs for conv2d, fully_connected and max_pool2d.
     with slim.arg_scope([slim.conv2d, slim.fully_connected, slim.max_pool2d],
                         outputs_collections=end_points_collection):
