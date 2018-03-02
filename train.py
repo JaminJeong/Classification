@@ -173,8 +173,7 @@ def main(_):
     else:
         init_fn = slim.assign_from_checkpoint_fn(FLAGS.pretrained_file_path,
                                                  variables_to_restore,
-                                                 ignore_missing_vars=True
-                                                 )
+                                                 ignore_missing_vars=True)
 
     # Set up the Saver for saving and restoring model checkpoints.
     saver = tf.train.Saver(max_to_keep=1000)
