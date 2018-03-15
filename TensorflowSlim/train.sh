@@ -1,5 +1,5 @@
 CUDA_VISIBLE_DEVICES=0 \
-python3 ./train_image_classifier.py \
+python ./train_image_classifier.py \
      --train_dir=./log \
      --dataset_dir=./tfrecords \
      --dataset_name=flowers \

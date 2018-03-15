@@ -6,7 +6,7 @@ IMAGES_DIR=./flower_photos
 
 #CUDA_VISIBLE_DEVICES=0,1,2,3 \
 CUDA_VISIBLE_DEVICES=5 \
-python3 build_image_data.py \
+python build_image_data.py \
     --train_directory=$IMAGES_DIR/train \
     --validation_directory=$IMAGES_DIR/validation \
     --output_directory=./tfrecords \

@@ -4,7 +4,7 @@
 TRAIN_DIR=./log
 
 # Where the dataset is saved to.
-DATASET_DIR=$GIT_ROOT_DIR/Code/Classification/tfrecords
+DATASET_DIR=../tfrecords
 
 # Number of GPU
 NUM_GPU=0
@@ -18,7 +18,7 @@ NUM_EXAMPLES_VAL=733
 
 # Run the training script.
 CUDA_VISIBLE_DEVICES=$NUM_GPU \
-python3 train.py \
+python train.py \
     --train_dir=${TRAIN_DIR} \
     --dataset_dir=${DATASET_DIR} \
     --max_steps=$MAX_STEPS \
@@ -35,7 +35,7 @@ python3 train.py \
     --adam_beta1=0.9 \
     --adam_beta2=0.999 \
     --adam_epsilon=1.0E-08 \
-    --pretrained_file_path=$GIT_ROOT_DIR/Code/Classification/pretrained_model/vgg_16.ckpt \
+    --pretrained_file_path=../pretrained_model/vgg_16.ckpt \
     --subset='validation' \
     --mode='train' \
     #--mode='inference' \

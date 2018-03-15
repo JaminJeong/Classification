@@ -1,6 +1,6 @@
 # Run evaluation.
 CUDA_VISIBLE_DEVICES=1 \
-python3 ./eval_image_classifier.py \
+python ./eval_image_classifier.py \
   --checkpoint_path=./log \
   --eval_dir=./log \
   --dataset_name=flowers \
