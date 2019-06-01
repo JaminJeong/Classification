@@ -2,7 +2,7 @@
 
 ### script
 ```bash
-pip3 install wget
+pip3 install wget # if you use docker env, you don't use it.
 cd datset/original
 bash download_pet_dataset.sh
 cd ..
