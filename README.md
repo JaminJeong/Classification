@@ -6,7 +6,7 @@ first, download datsets which you want.
  
 ## TensorflowSlim
  - how to use
-  - readme.md
+    - readme.md
 
  - reference
    - https://github.com/tensorflow/models/tree/master/research/slim
