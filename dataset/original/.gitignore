@@ -1,0 +1,6 @@
+*.pyc
+annotations/
+images/
+annotations.tar.gz
+images.tar.gz
+
