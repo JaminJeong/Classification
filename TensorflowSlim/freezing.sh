@@ -1,18 +1,14 @@
+LOG_DIR=./log_pet_mobilenet
+PB_DIR=./pb_file
+MODEL_OUTPUT_GRAPH=MobilenetV2/Predictions/Reshape_1
 
-#source ./environment_setting.sh
-#CUDA_VISIBLE_DEVICES=0 \
-#python3 freezing.py \
-#    --log_dir=./pb_file \
-#    --infer_car=./export_mobilenet.pb \
-#    --model_car=./logs/can_log_quant2/model.ckpt-567831 \
-#    --model_name='cl_model' \
-#    --model_input_graph=$MODEL_INPUT_GRAPH \
-#    --model_output_graph=$MODEL_OUTPUT_GRAPH \
-
+if [ ! -d $PB_DIR ]; then
+    mkdir $PB_DIR
+fi
 
 CUDA_VISIBLE_DEVICES=0 \
 freeze_graph --input_graph=./export_mobilenet.pb \
-  --input_checkpoint=./logs/can_log_quant2/model.ckpt-567831 \
+  --input_checkpoint=$LOG_DIR/model.ckpt-10022 \
   --input_binary=true \
-  --output_graph=./pb_file/frozen_cl_model.pb \
-  --output_node_names=MobilenetV2/Predictions/Reshape_1
+  --output_graph=$PB_DIR/frozen_cl_model.pb \
+  --output_node_names=$MODEL_OUTPUT_GRAPH

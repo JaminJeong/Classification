@@ -82,7 +82,7 @@
 dataset/can.py
 
 ```python
-_FILE_PATTERN = 'cans_%s_*.tfrecord'
+_FILE_PATTERN = 'pet_%s_*.tfrecord'
 
 SPLITS_TO_SIZES = {'train': 162065, 'test': 162065}
 

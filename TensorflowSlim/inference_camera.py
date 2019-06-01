@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jun 27 16:48:51 2017
 
-@author: chang
-"""
 import tensorflow as tf
 import numpy as np
 import time

@@ -31,11 +31,11 @@ slim = tf.contrib.slim
 
 _FILE_PATTERN = 'pet_%s_*.tfrecord'
 
-SPLITS_TO_SIZES = {'train': 162065, 'test': 162065}
+SPLITS_TO_SIZES = {'train': 6069, 'test': 675}
 
 _NUM_CLASSES = 34
 
-_ITEMS_TO_DESCRIPTIONS = {ㅊ무
+_ITEMS_TO_DESCRIPTIONS = {
     'image': 'A color image of varying size.',
     'label': 'A single integer between 0 and 4',
 }

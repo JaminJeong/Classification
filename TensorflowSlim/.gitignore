@@ -1,2 +1,4 @@
 log_*
 *.pyc
+export_mobilenet.pb
+pb_file

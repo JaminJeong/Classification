@@ -30,14 +30,14 @@
 dataset/pet.py
 
 ```python
-_FILE_PATTERN = 'cans_%s_*.tfrecord'
+_FILE_PATTERN = 'pet_%s_*.tfrecord'
 
-SPLITS_TO_SIZES = {'train': 162065, 'test': 162065}
+SPLITS_TO_SIZES = {'train': 6078, 'test': 678}
 
-_NUM_CLASSES = 21
+_NUM_CLASSES = 34
 ```
 
-dataset/convert_can.py
+dataset/convert_pet.py
 
 ```python    
 _NUM_VALIDATION = 300 // train validation 을 나눌 비율

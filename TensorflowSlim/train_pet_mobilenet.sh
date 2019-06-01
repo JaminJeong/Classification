@@ -1,10 +1,14 @@
+TFRECORD=../dataset/tfrecords
+PRET_CKPT=../pretrained_ckpt/mobilenet_v2_1.0_224/mobilenet_v2_1.0_224.ckpt
+LOG_DIR=./log_pet_mobilenet
 
-TFRECORD=././datasets/tfrecords
-PRET_CKPT=./pre_checkpoint/mobilenet_v2_1.0_224/mobilenet_v2_1.0_224.ckpt
+if [ ! -d $LOG_DIR ]; then
+    mkdir $LOG_DIR
+fi
 
 CUDA_VISIBLE_DEVICES=0 \
 python ./train_image_classifier.py \
-     --train_dir=./log_pet_mobilenet \
+     --train_dir=$LOG_DIR \
      --dataset_dir=${TFRECORD} \
      --dataset_name=pet \
      --dataset_split_name=train \
@@ -17,6 +21,7 @@ python ./train_image_classifier.py \
      --batch_size=32 \
      --learning_rate=0.001 \
      --learning_rate_decay_type=fixed \
+     --train_image_size=224 \
 
 #    --model_name=inception_v3 \
 #    --log_every_n_steps=100 \
