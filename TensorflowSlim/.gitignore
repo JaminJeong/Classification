@@ -1,3 +1,2 @@
-log
+log_*
 *.pyc
-tfrecords

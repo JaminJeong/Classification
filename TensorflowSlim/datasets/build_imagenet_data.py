@@ -93,8 +93,9 @@ import sys
 import threading
 
 import numpy as np
-from six.moves import xrange
+from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
+
 
 tf.app.flags.DEFINE_string('train_directory', '/tmp/',
                            'Training data directory')
@@ -313,7 +314,7 @@ def _process_image(filename, coder):
     width: integer, image width in pixels.
   """
   # Read the image file.
-  image_data = tf.gfile.FastGFile(filename, 'r').read()
+  image_data = tf.gfile.GFile(filename, 'r').read()
 
   # Clean the dirty data.
   if _is_png(filename):
@@ -496,8 +497,9 @@ def _find_image_files(data_dir, labels_file):
     labels: list of integer; each integer identifies the ground truth.
   """
   print('Determining list of input files and labels from %s.' % data_dir)
-  challenge_synsets = [l.strip() for l in
-                       tf.gfile.FastGFile(labels_file, 'r').readlines()]
+  challenge_synsets = [
+      l.strip() for l in tf.gfile.GFile(labels_file, 'r').readlines()
+  ]
 
   labels = []
   filenames = []
@@ -620,7 +622,7 @@ def _build_synset_lookup(imagenet_metadata_file):
     Dictionary of synset to human labels, such as:
       'n02119022' --> 'red fox, Vulpes vulpes'
   """
-  lines = tf.gfile.FastGFile(imagenet_metadata_file, 'r').readlines()
+  lines = tf.gfile.GFile(imagenet_metadata_file, 'r').readlines()
   synset_to_human = {}
   for l in lines:
     if l:
@@ -654,7 +656,7 @@ def _build_bounding_box_lookup(bounding_box_file):
     Dictionary mapping image file names to a list of bounding boxes. This list
     contains 0+ bounding boxes.
   """
-  lines = tf.gfile.FastGFile(bounding_box_file, 'r').readlines()
+  lines = tf.gfile.GFile(bounding_box_file, 'r').readlines()
   images_to_bboxes = {}
   num_bbox = 0
   num_image = 0

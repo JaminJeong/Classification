@@ -1,0 +1,5 @@
+train
+validation
+original
+tfrecords
+*.pyc

@@ -1,0 +1,1 @@
+python3 split_train_val_images.py
