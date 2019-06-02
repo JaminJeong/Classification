@@ -28,3 +28,4 @@ first, download datsets which you want.
 - cuda toolkit library : 10.0
 - Python : 3.5
 - Tensorflow : 1.13.1
+- opencv-python : 4.1
