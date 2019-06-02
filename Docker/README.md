@@ -1,7 +1,7 @@
 ## Docker
 - submodule
   - https://github.com/mooneclipse03/TensorflowDocker.git
-```shell
+```bash
 git submodule init
 git submodule update
 git pull
