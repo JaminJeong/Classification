@@ -11,6 +11,11 @@ first, download datsets which you want.
 - how to use
   - readme.md
  
+## 2. Pretrained ckeckpoint
+download pretrained ckpt files for fine-tune
+- how to use
+  - readme.md
+
 ## 3.1. TensorflowSlim
  - how to use
     - readme.md
