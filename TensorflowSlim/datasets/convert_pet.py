@@ -172,6 +172,7 @@ def run(dataset_dir):
 
   train_dir = os.path.join(dataset_dir, "train")
   val_dir = os.path.join(dataset_dir, "validation")
+  label_dir = os.path.join(dataset_dir, "tfrecords")
 
   #dataset_utils.download_and_uncompress_tarball(_DATA_URL, dataset_dir)
   photo_train_filenames, class_train_names = _get_filenames_and_classes(train_dir)
@@ -198,7 +199,7 @@ def run(dataset_dir):
 
   # Finally, write the labels file:
   labels_to_class_names = dict(zip(range(len(class_val_names)), class_val_names))
-  dataset_utils.write_label_file(labels_to_class_names, dataset_dir)
+  dataset_utils.write_label_file(labels_to_class_names, label_dir)
 
   #_clean_up_temporary_files(dataset_dir)
   print('\nFinished converting the cans dataset!')
