@@ -4,7 +4,8 @@
 ```shell
 git submodule init
 git submodule update
+git pull
 ```
 
 ## reference
-http://hub.docker.com/r/tensorflow/tensorflow/
+  - http://hub.docker.com/r/tensorflow/tensorflow/
