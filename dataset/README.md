@@ -58,7 +58,7 @@ bash split_train_val_images.sh
    - 90% train data
    - 10% validation data 
    
-### result
+### Folder Structure
 ```bash 
 $tree -d
 .
