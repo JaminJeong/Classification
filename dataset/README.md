@@ -57,6 +57,37 @@ bash split_train_val_images.sh
  - split_train_val_images.sh
    - 90% train data
    - 10% validation data 
+   
+### result
+```bash 
+$tree -d
+.
+├── original
+│   ├── annotations
+│   │   ├── trimaps
+│   │   └── xmls
+│   └── images
+├── tfrecords
+├── train
+│   ├── Abyssinian
+│   ├── Bengal
+│   ├── Birman
+................................
+│   ├── shiba_inu
+│   ├── staffordshire_bull_terrier
+│   ├── wheaten_terrier
+│   └── yorkshire_terrier
+└── validation
+    ├── Abyssinian
+    ├── Bengal
+    ├── Birman
+................................
+    ├── shiba_inu
+    ├── staffordshire_bull_terrier
+    ├── wheaten_terrier
+    └── yorkshire_terrier
+
+```
 
 ### Requirements
  - wget
