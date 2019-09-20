@@ -5,10 +5,24 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.applications import ResNet50
 
 import os
-from keras.layers import Input
+from keras.models import Model
+from keras.layers import Dense, Input, Activation
+from keras.layers.normalization import BatchNormalization
+
+class_num = 34
 
 input = Input(shape=(224, 224, 3))
-model = ResNet50(input_tensor=input, include_top=True, weights=None, pooling='max')
+model = ResNet50(input_tensor=input, include_top=False, weights='imagenet', pooling='max')
+ 
+x = model.output
+x = Dense(1024, name='fully', init='uniform')(x)
+x = BatchNormalization()(x)
+x = Activation('relu')(x)
+x = Dense(512, init='uniform')(x)
+x = BatchNormalization()(x)
+x = Activation('relu')(x)
+x = Dense(class_num, activation='softmax', name='softmax')(x)
+model = Model(model.input, x)
 model.summary()
 
 train_dir = '../dataset/train/'
