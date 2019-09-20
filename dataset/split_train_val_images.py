@@ -2,12 +2,9 @@ import os
 import shutil
 import random
 
-# print (os.getcwd()) #현재 디렉토리의
-# print (os.path.realpath(__file__))#파일
-# print (os.path.dirname(os.path.realpath(__file__)) )#파일이 위치한 디렉토리
-
-# cur_path = os.path.dirname(os.path.realpath(__file__))
-cur_path = '/home/jamin/projects/Code/Classification/dataset'
+cur_path = os.getcwd()
+assert os.path.isdir('original')
+assert os.path.isfile('labels.txt')
 
 lable_file = os.path.join(cur_path, "labels.txt")
 train_dir = os.path.join(cur_path, "train")
