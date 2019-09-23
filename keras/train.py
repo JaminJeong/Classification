@@ -33,8 +33,10 @@ assert os.path.isdir(train_dir)
 validation_dir = '../dataset/validation/'
 assert os.path.isdir(validation_dir)
 
+opt = optimizers.Adam(lr=1e-4)
+
 model.compile(loss='categorical_crossentropy',
-               optimizer=optimizers.Adam(lr=1e-4),
+               optimizer=opt,
                metrics=['acc'])
 
 train_datagen = ImageDataGenerator(rescale=1./255)
@@ -64,25 +66,36 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 if not os.path.isdir(checkpoint_dir):
     os.mkdir(checkpoint_dir)
 
-# 체크포인트 콜백 만들기
 cp_callback = keras.callbacks.ModelCheckpoint(checkpoint_path,
-                                              # save_weights_only=True,
+                                              save_weights_only=False,
                                               verbose=1,
                                               period=5)
-if os.path.isdir(checkpoint_dir) and len(os.listdir(checkpoint_dir)) != 0:
-    latest = tf.train.latest_checkpoint(checkpoint_dir)
-    print("load_weights : ", latest)
-    model.load_weights(latest)
 
-model.save_weights(checkpoint_path.format(epoch=10))
+# ckpt = tf.train.Checkpoint(step=tf.Variable(1), optimizer=opt, net=model)
+# manager = tf.train.CheckpointManager(ckpt, './tf_ckpts', max_to_keep=3)
+# ckpt.restore(manager.latest_checkpoint)
+# if manager.latest_checkpoint:
+#   print("Restored from {}".format(manager.latest_checkpoint))
+# else:
+#   print("Initializing from scratch.")
+
+
+# if os.path.isdir(checkpoint_dir) and len(os.listdir(checkpoint_dir)) != 0:
+#     latest = tf.train.latest_checkpoint(checkpoint_dir)
+#     print("load_weights : ", latest)
+
+# model.load_weights("training_1/cp-0010.ckpt")
+
+model.save_weights(checkpoint_path.format(epoch=0))
 
 hist = model.fit_generator(
         train_generator,
         steps_per_epoch=75,
-        epochs=10,
+        epochs=20,
         validation_data=validation_generator,
         validation_steps=75,
         callbacks=[tb_hist, cp_callback])
+        # initial_epoch=10)
 
 model.save('pet.h5')
 
