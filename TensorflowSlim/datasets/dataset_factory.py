@@ -18,19 +18,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from datasets import cifar10
-from datasets import flowers
-from datasets import imagenet
-from datasets import mnist
-from datasets import visualwakewords
 from datasets import pet
 
 datasets_map = {
-    'cifar10': cifar10,
-    'flowers': flowers,
-    'imagenet': imagenet,
-    'mnist': mnist,
-    'visualwakewords': visualwakewords,
     'pet': pet,
 }
 
