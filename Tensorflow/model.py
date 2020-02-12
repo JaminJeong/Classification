@@ -19,13 +19,6 @@ _BATCH_NORM_EPSILON = 1e-5
 
 
 class Model(object):
-  """
-  Author = {Jakub Sochor and Jakub Špaňhel and Adam Herout},
-  Title = {BoxCars: Improving Vehicle Fine-Grained Recognition using 3D Bounding Boxes in Traffic Surveillance},
-  Year = {2017},
-  Eprint = {arXiv:1703.00686},
-  """
-
   def __init__(self, mode):
     """Basic setup.
 
